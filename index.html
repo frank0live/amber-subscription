@@ -2119,16 +2119,18 @@
 })();
   </script>
 
-  <!-- GH-PAGES SHIM: allow a bare token in the hash, resolved against the known panel -->
+  <!-- GH-PAGES SHIM: a bare token in the hash is resolved against the preset panel -->
   <script>
   (function () {
     var PRESET_PANEL = 'https://modiriat.zelnora.ir:8000';
     var h = (location.hash || '').replace(/^#/, '').trim();
     if (!h) return;
-    if (h.indexOf('://') !== -1) return;                 // already a full URL
-    if (h.indexOf('/') !== -1) return;                   // path-ish input, let the app parse it
-    location.replace(location.pathname + location.search +
-      '#/' + 'sub/' + encodeURIComponent(h) + '?panel=' + encodeURIComponent(PRESET_PANEL));
+    if (/^https?:/i.test(h)) return;                 // full URL — app handles it
+    if (/^\//.test(h)) return;                      // #/sub/<token> — app handles it
+    if (/[?&]token=/.test(location.search)) return;   // already have an explicit token
+    var url = location.pathname + '?panel=' + encodeURIComponent(PRESET_PANEL) +
+              '&token=' + encodeURIComponent(h);
+    location.replace(url);
   })();
   </script>
 </body>
