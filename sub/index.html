@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="icon" type="image/png" href="assets/logo.png"><link rel="apple-touch-icon" href="assets/logo.png"><title>اشتراک</title>
+  <link rel="icon" type="image/png" href="assets/logo.png"><link rel="apple-touch-icon" href="assets/logo.png"><title>کهربا — اشتراک</title>
   <style>
     @font-face {
       font-family: "Vazirmatn";
@@ -16,13 +16,13 @@
     }
 
     :root {
-      --bg: #090d14;
-      --surface: #111522;
+      --bg: #0a0d12;
+      --surface: #14161d;
       --surface-soft: #171d2d;
       --text: #f8fafc;
       --muted: #9aa4b8;
       --line: rgba(255, 255, 255, 0.09);
-      --accent: #7c5cff;
+      --accent: #f27a1a;
       --accent-2: #20c7d7;
       --success: #4ade80;
       --warning: #fbbf24;
@@ -112,8 +112,8 @@
     }
 
     .field:focus {
-      border-color: rgba(124, 92, 255, 0.62);
-      box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18);
+      border-color: rgba(242, 122, 26, 0.62);
+      box-shadow: 0 0 0 4px rgba(242, 122, 26, 0.18);
     }
 
     .primary-btn {
@@ -496,8 +496,8 @@
       flex-shrink: 0;
       border-radius: var(--radius-md);
       color: var(--accent);
-      background: rgba(124, 92, 255, 0.12);
-      border: 1px solid rgba(124, 92, 255, 0.2);
+      background: rgba(242, 122, 26, 0.12);
+      border: 1px solid rgba(242, 122, 26, 0.2);
       line-height: 0;
       overflow: hidden;
     }
@@ -637,7 +637,7 @@
       padding: 4px 9px;
       border-radius: var(--radius-pill);
       color: var(--accent);
-      background: rgba(124, 92, 255, 0.12);
+      background: rgba(242, 122, 26, 0.12);
       font-size: 11px;
       font-weight: 820;
       white-space: nowrap;
@@ -772,8 +772,8 @@
 
     .app-btns .im {
       color: #b7adff;
-      background: rgba(124, 92, 255, 0.09);
-      border: 1px solid rgba(124, 92, 255, 0.54);
+      background: rgba(242, 122, 26, 0.09);
+      border: 1px solid rgba(242, 122, 26, 0.54);
     }
 
     .empty {
@@ -906,8 +906,8 @@
     .brand-logo{
       display:block;margin:0 auto 14px;width:72px;height:72px;border-radius:20px;
       object-fit:cover;border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 10px 30px rgba(0,0,0,.45), 0 0 0 4px rgba(124,92,255,.10);
-      background:#111522;
+      box-shadow:0 10px 30px rgba(0,0,0,.45), 0 0 0 4px rgba(242,122,26,.14);
+      background:#14161d;
     }
     .profile-head .brand-logo{
       width:44px;height:44px;border-radius:14px;margin:0;flex:0 0 44px;
@@ -915,13 +915,16 @@
     }
     .login-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px;}
     .login-head .login-title{margin-bottom:0;}
+    .login-head .brand-sub{
+      margin:6px 0 0;font-size:12.5px;color:var(--muted);letter-spacing:.04em;font-weight:600;
+    }
     .profile-head .who{display:flex;align-items:center;gap:12px;min-width:0;}
   </style>
 </head>
 <body>
   <main class="page">
     <section class="card login-card" id="login-card">
-      <div class="login-head"><img class="brand-logo" src="assets/logo.png" alt="" width="72" height="72"><h1 class="login-title">اشتراک</h1></div>
+      <div class="login-head"><img class="brand-logo" src="assets/logo.png" alt="VPN Centers" width="72" height="72"><h1 class="login-title">اشتراک</h1><p class="brand-sub">Amber Subscription</p></div>
       <label class="field-label" for="panel-url">آدرس پنل</label>
       <input class="field" id="panel-url" type="url" placeholder="https://panel.example.com" autocomplete="off">
       <label class="field-label" for="sub-token">لینک یا توکن</label>
@@ -941,7 +944,7 @@
       <section class="card profile">
         <div class="profile-head">
           <div class="who">
-            <img class="brand-logo" src="assets/logo.png" alt="" width="44" height="44">
+            <img class="brand-logo" src="assets/logo.png" alt="VPN Centers" width="44" height="44">
             <div>
             <p class="user-label">نام کاربر</p>
             <h1 class="username" id="f-username">—</h1>
@@ -2136,7 +2139,7 @@
 })();
   </script>
 
-  <!-- GH-PAGES SHIM: a bare token in the hash is resolved against the preset panel -->
+  <!-- AMBER SHIM: a bare token in the hash is resolved against the preset panel -->
   <script>
   (function () {
     var PRESET_PANEL = 'https://modiriat.zelnora.ir:8000';
