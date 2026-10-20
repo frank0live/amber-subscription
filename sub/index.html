@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>اشتراک</title>
+  <link rel="icon" type="image/png" href="assets/logo.png"><link rel="apple-touch-icon" href="assets/logo.png"><title>اشتراک</title>
   <style>
     @font-face {
       font-family: "Vazirmatn";
@@ -902,11 +902,26 @@
       }
     }
   </style>
+  <style id="brand-logo-css">
+    .brand-logo{
+      display:block;margin:0 auto 14px;width:72px;height:72px;border-radius:20px;
+      object-fit:cover;border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 10px 30px rgba(0,0,0,.45), 0 0 0 4px rgba(124,92,255,.10);
+      background:#111522;
+    }
+    .profile-head .brand-logo{
+      width:44px;height:44px;border-radius:14px;margin:0;flex:0 0 44px;
+      box-shadow:0 4px 14px rgba(0,0,0,.4);
+    }
+    .login-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px;}
+    .login-head .login-title{margin-bottom:0;}
+    .profile-head .who{display:flex;align-items:center;gap:12px;min-width:0;}
+  </style>
 </head>
 <body>
   <main class="page">
     <section class="card login-card" id="login-card">
-      <h1 class="login-title">اشتراک</h1>
+      <div class="login-head"><img class="brand-logo" src="assets/logo.png" alt="" width="72" height="72"><h1 class="login-title">اشتراک</h1></div>
       <label class="field-label" for="panel-url">آدرس پنل</label>
       <input class="field" id="panel-url" type="url" placeholder="https://panel.example.com" autocomplete="off">
       <label class="field-label" for="sub-token">لینک یا توکن</label>
@@ -925,10 +940,12 @@
 
       <section class="card profile">
         <div class="profile-head">
-          <div>
+          <div class="who">
+            <img class="brand-logo" src="assets/logo.png" alt="" width="44" height="44">
+            <div>
             <p class="user-label">نام کاربر</p>
             <h1 class="username" id="f-username">—</h1>
-          </div>
+          </div></div>
           <span class="status-pill active" id="f-status">—</span>
         </div>
 
@@ -2128,9 +2145,8 @@
     if (/^https?:/i.test(h)) return;                 // full URL — app handles it
     if (/^\//.test(h)) return;                      // #/sub/<token> — app handles it
     if (/[?&]token=/.test(location.search)) return;   // already have an explicit token
-    var url = location.pathname + '?panel=' + encodeURIComponent(PRESET_PANEL) +
-              '&token=' + encodeURIComponent(h);
-    location.replace(url);
+    location.replace(location.pathname + '?panel=' + encodeURIComponent(PRESET_PANEL) +
+                     '&token=' + encodeURIComponent(h));
   })();
   </script>
 </body>
