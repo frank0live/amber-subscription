@@ -51,8 +51,14 @@ if [ -n "$PANEL" ]; then ok "panel: $PANEL"; else warn "panel not detected — l
 
 # ---------------------------------------------------------------- 3. web server
 detect_server() {
-  if command -v nginx >/dev/null 2>&1 && systemctl is-active --quiet nginx 2>/dev/null; then echo nginx; return; fi
-  if command -v caddy  >/dev/null 2>&1 && systemctl is-active --quiet caddy  2>/dev/null; then echo caddy;  return; fi
+  # systemd-backed host: prefer an active service
+  if command -v systemctl >/dev/null 2>&1; then
+    if command -v nginx  >/dev/null 2>&1 && systemctl is-active --quiet nginx 2>/dev/null; then echo nginx; return; fi
+    if command -v caddy  >/dev/null 2>&1 && systemctl is-active --quiet caddy  2>/dev/null; then echo caddy;  return; fi
+  fi
+  # no systemd (container / chroot): fall back to the binary + its config tree
+  if command -v nginx >/dev/null 2>&1 && { [ -d /etc/nginx/conf.d ] || [ -d /etc/nginx/sites-available ]; }; then echo nginx; return; fi
+  if command -v caddy  >/dev/null 2>&1 && [ -f /etc/caddy/Caddyfile ]; then echo caddy; return; fi
   if command -v apache2 >/dev/null 2>&1 || command -v httpd >/dev/null 2>&1; then echo apache; return; fi
   echo none
 }
@@ -82,8 +88,14 @@ location $PREFIX/ {
     add_header Cache-Control "no-store";
 }
 NGINX
-    nginx -t >/dev/null 2>&1 && { systemctl reload nginx; ok "nginx reloaded ($CONF)"; } \
-      || { rm -f "$CONF"; nginx -t; die "nginx config test failed — file rolled back"; }
+    nginx -t >/dev/null 2>&1 || { rm -f "$CONF"; nginx -t; die "nginx config test failed — file rolled back"; }
+    if command -v systemctl >/dev/null 2>&1 && systemctl is-system-running >/dev/null 2>&1; then
+      systemctl reload nginx && ok "nginx reloaded ($CONF)" || warn "systemctl reload failed — try: nginx -s reload"
+    elif nginx -s reload 2>/dev/null; then
+      ok "nginx reloaded (nginx -s reload)"
+    else
+      warn "nginx config written to $CONF — reload it manually (nginx -s reload)"
+    fi
     ;;
   caddy)
     # append the route to the existing site block only if it isn't there yet
