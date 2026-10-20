@@ -4,6 +4,11 @@ A white-label subscription page theme for **3x-ui / Marzban** panels — **Amber
 
 RTL-first (فارسی), zero branding of the seller, fully self-contained: one `index.html`, inline CSS/JS, no build step, no external services.
 
+| | |
+|---|---|
+| ![Home](shots/01-home.png) | ![Login](shots/02-login.png) |
+| Home — username, usage, expiry, configs | Login / entry — VPN Centers logo |
+
 ## ✨ Features
 - 🟠 **Amber palette** — orange `#f27a1a` on warm navy, matched to the VPN Centers mark
 - 🖼️ **Your logo** — login card (72px) + beside the username (44px) + favicon
