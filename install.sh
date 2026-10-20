@@ -78,23 +78,43 @@ ok "files → $WEBROOT"
 case "$SERVER" in
   nginx)
     CONF="/etc/nginx/conf.d/amber-sub.conf"
+    # A standalone server block: `location` is illegal at http level, and we must not
+    # touch whatever vhost the host already serves its own site from.
     cat > "$CONF" <<NGINX
 # Amber Subscription (managed by install.sh)
-location = /amber        { return 301 /amber/; }
-location $PREFIX/ {
-    alias $WEBROOT/;
-    index index.html;
-    try_files \$uri \$uri/ /amber/index.html;
-    add_header Cache-Control "no-store";
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    location = /amber { return 301 /amber/; }
+
+    location /amber/ {
+        alias $WEBROOT/;
+        index index.html;
+        try_files \$uri \$uri/ /amber/index.html;
+        add_header Cache-Control "no-store";
+    }
 }
 NGINX
-    nginx -t >/dev/null 2>&1 || { rm -f "$CONF"; nginx -t; die "nginx config test failed — file rolled back"; }
+    if ! nginx -t >/dev/null 2>&1; then
+      rm -f "$CONF"
+      nginx -t || true
+      die "nginx config test failed — file rolled back"
+    fi
     if command -v systemctl >/dev/null 2>&1 && systemctl is-system-running >/dev/null 2>&1; then
       systemctl reload nginx && ok "nginx reloaded ($CONF)" || warn "systemctl reload failed — try: nginx -s reload"
     elif nginx -s reload 2>/dev/null; then
       ok "nginx reloaded (nginx -s reload)"
     else
       warn "nginx config written to $CONF — reload it manually (nginx -s reload)"
+    fi
+    # if the host already serves its own site on port 80, say how to merge instead
+    if grep -q "server[[:space:]]*{" /etc/nginx/nginx.conf 2>/dev/null || \
+       ls /etc/nginx/sites-enabled/* /etc/nginx/conf.d/*.conf 2>/dev/null | grep -qv "amber-sub.conf"; then
+      warn "an existing vhost on port 80 may win — if so, add this inside your own server{} block:"
+      echo "      location = /amber        { return 301 /amber/; }"
+      echo "      location /amber/ { alias $WEBROOT/; index index.html; try_files \$uri \$uri/ /amber/index.html; }"
     fi
     ;;
   caddy)
